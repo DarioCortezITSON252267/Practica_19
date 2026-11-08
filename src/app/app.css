@@ -1,0 +1,4 @@
+/* El mensaje de @empty ocupa todo el ancho de la rejilla, no sólo una columna. */
+.rejilla .vacio {
+  grid-column: 1 / -1;
+}

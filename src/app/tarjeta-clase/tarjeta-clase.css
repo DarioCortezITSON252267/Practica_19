@@ -1,0 +1,4 @@
+/* La etiqueta <app-tarjeta-clase> es la celda de la rejilla: block para que la tarjeta la llene. */
+:host {
+  display: block;
+}
