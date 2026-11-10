@@ -15,37 +15,78 @@
       <p>Las clases del gimnasio (datos locales).</p>
     </div>
     <div class="acciones">
-      <button class="boton boton--peligro" (click)="vaciar()" [disabled]="totalClases() === 0">
+      <button
+        class="boton boton--peligro"
+        (click)="catalogo.vaciar()"
+        [disabled]="catalogo.clases().length === 0"
+      >
         Vaciar catálogo
       </button>
-      <button class="boton boton--secundario" (click)="restaurar()" [disabled]="totalClases() > 0">
+      <button
+        class="boton boton--secundario"
+        (click)="catalogo.restaurar()"
+        [disabled]="catalogo.clases().length > 0"
+      >
         Restaurar catálogo
       </button>
     </div>
   </section>
 
-  <!-- El resumen: tres números que salen de las clases. -->
+  <!-- El resumen: tres números calculados en el servicio con computed(). Siguen al filtro. -->
   <section class="resumen">
     <div class="resumen__dato">
-      <span class="resumen__numero">{{ totalClases() }}</span>
-      <span class="resumen__texto">clases en total</span>
+      <span class="resumen__numero">{{ catalogo.visibles().length }}</span>
+      <span class="resumen__texto">clases visibles</span>
     </div>
     <div class="resumen__dato">
-      <span class="resumen__numero">{{ minutosSemana() }}</span>
+      <span class="resumen__numero">{{ catalogo.minutos() }}</span>
       <span class="resumen__texto">minutos a la semana</span>
     </div>
     <div class="resumen__dato">
-      <span class="resumen__numero">{{ clasesLargas() }}</span>
+      <span class="resumen__numero">{{ catalogo.largas() }}</span>
       <span class="resumen__texto">clases de una hora o más</span>
     </div>
   </section>
 
-  <!-- Una tarjeta por clase. track le dice a Angular cómo reconocer cada clase (como key en React). -->
-  <section class="rejilla">
-    @for (clase of clases(); track clase.id) {
-      <app-tarjeta-clase [clase]="clase" />
-    } @empty {
-      <p class="vacio">No hay clases en el catálogo. Usa «Restaurar catálogo» para volver a verlas.</p>
-    }
-  </section>
+  <!-- El filtro no recibe nada: cambia la categoría directo en el servicio. -->
+  <app-filtro-categoria />
+
+  <!-- El tablero: las tarjetas a la izquierda y el detalle de la elegida a la derecha. -->
+  <div class="tablero">
+    <section class="rejilla">
+      <!-- track le dice a Angular cómo reconocer cada clase (como key en React). -->
+      @for (clase of catalogo.visibles(); track clase.id) {
+        <app-tarjeta-clase
+          [clase]="clase"
+          [activa]="clase.id === catalogo.seleccionada()?.id"
+          (elegir)="catalogo.seleccionar($event)"
+        />
+      } @empty {
+        <p class="vacio">No hay clases en el catálogo. Usa «Restaurar catálogo» para volver a verlas.</p>
+      }
+    </section>
+
+    <!-- El panel lateral con el detalle de la clase elegida. -->
+    <aside class="lateral">
+      @if (catalogo.seleccionada(); as clase) {
+        <article class="tarjeta">
+          <img [src]="clase.imagen" [alt]="clase.nombre" />
+          <h2>{{ clase.nombre }}</h2>
+          <p class="clase__desc">{{ clase.descripcion }}</p>
+          <div class="dato">
+            <span class="dato__clave">Categoría</span>
+            <span class="dato__valor">{{ clase.categoria }}</span>
+          </div>
+          <div class="dato">
+            <span class="dato__clave">Duración</span>
+            <span class="dato__valor">{{ clase.duracionMin }} min</span>
+          </div>
+        </article>
+      } @else {
+        <div class="tarjeta">
+          <p class="vacio">Elige una clase para ver su detalle.</p>
+        </div>
+      }
+    </aside>
+  </div>
 </main>
