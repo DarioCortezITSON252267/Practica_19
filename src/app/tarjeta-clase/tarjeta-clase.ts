@@ -1,6 +1,7 @@
 // <app-tarjeta-clase> — la tarjeta de UNA clase. La genera el CLI:
 // npx ng generate component tarjeta-clase
 import { Component, input, output } from '@angular/core';
+import { urlImagen } from '../config';
 import type { Clase } from '../modelos/clase';
 
 @Component({
@@ -20,4 +21,7 @@ export class TarjetaClase {
   // SALIDA: de la tarjeta hacia el padre. output() es como pasarle onElegir en React: la
   // tarjeta sólo avisa con emit(), y qué hacer con la clase lo decide el padre en (elegir).
   readonly elegir = output<Clase>();
+
+  // Práctica 21: las imágenes las sirve la API (/img/clase-01.jpg → http://localhost:3000/img/...).
+  protected readonly urlImagen = urlImagen;
 }

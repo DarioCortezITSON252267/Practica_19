@@ -1,20 +1,14 @@
-// <app-root> — el componente raíz: el tablero del panel de administración.
-// Hace el papel de App.tsx en React.
-import { Component, inject } from '@angular/core';
-import { Catalogo } from './catalogo';
-import { FiltroCategoria } from './filtro-categoria/filtro-categoria';
-import { TarjetaClase } from './tarjeta-clase/tarjeta-clase';
+// <app-root> — el componente raíz: la barra y el hueco donde el router pinta cada página.
+// Hace el papel del <Layout> de React.
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  // Standalone: cada componente dice qué otros componentes usa en su template.
-  // Sin TarjetaClase aquí, <app-tarjeta-clase> no se reconoce (error NG8001).
-  imports: [TarjetaClase, FiltroCategoria],
+  // Standalone: cada componente dice qué usa en su template. Sin RouterOutlet,
+  // <router-outlet> no se reconoce; sin RouterLink, routerLink no hace nada.
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  // Práctica 20: el tablero ya no tiene estado propio. Las clases, el filtro, la clase
-  // elegida y el resumen viven en el servicio Catalogo; aquí sólo se leen y se cambian.
-  protected readonly catalogo = inject(Catalogo);
-}
+export class App {}

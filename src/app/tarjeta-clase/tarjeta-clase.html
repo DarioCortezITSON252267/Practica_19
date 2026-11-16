@@ -6,7 +6,7 @@
   (click)="elegir.emit(clase())"
   (keydown.enter)="elegir.emit(clase())"
 >
-  <img [src]="clase().imagen" [alt]="clase().nombre" loading="lazy" />
+  <img [src]="urlImagen(clase().imagen)" [alt]="clase().nombre" loading="lazy" />
   <div class="tarjeta-clase__cuerpo">
     <h3 class="tarjeta-clase__nombre">{{ clase().nombre }}</h3>
     <p class="clase__desc">{{ clase().descripcion }}</p>

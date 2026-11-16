@@ -1,0 +1,96 @@
+<section class="encabezado">
+  <div>
+    <h1>Nueva clase</h1>
+    <p>Todavía no se guarda en la API: «Guardar» sólo muestra lo que se mandaría.</p>
+  </div>
+  <div class="acciones">
+    <a routerLink="/clases" class="boton boton--secundario">← Volver al catálogo</a>
+  </div>
+</section>
+
+<!-- novalidate: los mensajes los pone Angular, no el navegador. -->
+<form class="tarjeta formulario" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+  <!-- Cada mensaje sale SÓLO si el campo ya fue tocado (se entró y se salió de él). -->
+  <div class="campo">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" formControlName="nombre" placeholder="Fuerza total" />
+    @if (c.nombre.touched && c.nombre.hasError('required')) {
+      <span class="error">El nombre es obligatorio</span>
+    }
+    @if (c.nombre.touched && c.nombre.hasError('maxlength')) {
+      <span class="error">El nombre admite máximo 80 caracteres</span>
+    }
+  </div>
+
+  <div class="fila">
+    <div class="campo">
+      <label for="categoria">Categoría</label>
+      <select id="categoria" formControlName="categoria">
+        <option value="" disabled>Elige una</option>
+        @for (categoria of categorias; track categoria) {
+          <option [value]="categoria">{{ categoria }}</option>
+        }
+      </select>
+      @if (c.categoria.touched && c.categoria.hasError('required')) {
+        <span class="error">Elige una categoría</span>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="duracion">Duración (minutos)</label>
+      <input id="duracion" type="number" formControlName="duracionMin" min="10" step="5" />
+      @if (c.duracionMin.touched && c.duracionMin.hasError('required')) {
+        <span class="error">La duración es obligatoria</span>
+      }
+      @if (c.duracionMin.touched && c.duracionMin.hasError('min')) {
+        <span class="error">La duración mínima es de 10 minutos</span>
+      }
+      <!-- El validador propio: su clave es 'bloquesDe5' y trae el valor sugerido. -->
+      @if (c.duracionMin.touched && c.duracionMin.hasError('bloquesDe5')) {
+        <span class="error">
+          La duración va en bloques de 5 minutos (por ejemplo, {{ c.duracionMin.getError('bloquesDe5').sugerido }})
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="campo">
+    <label for="descripcion">Descripción</label>
+    <textarea id="descripcion" rows="3" formControlName="descripcion"></textarea>
+    <span class="contador">{{ c.descripcion.value.length }} / 255</span>
+    @if (c.descripcion.touched && c.descripcion.hasError('required')) {
+      <span class="error">La descripción es obligatoria</span>
+    }
+    @if (c.descripcion.touched && c.descripcion.hasError('maxlength')) {
+      <span class="error">La descripción admite máximo 255 caracteres</span>
+    }
+  </div>
+
+  <div class="campo">
+    <label for="imagen">Imagen</label>
+    <input id="imagen" formControlName="imagen" placeholder="/img/clase-01.jpg" />
+    @if (c.imagen.touched && c.imagen.hasError('required')) {
+      <span class="error">La imagen es obligatoria</span>
+    }
+    @if (c.imagen.touched && c.imagen.hasError('pattern')) {
+      <span class="error">Escribe una ruta como /img/clase-01.jpg</span>
+    }
+    @if (c.imagen.touched && c.imagen.hasError('maxlength')) {
+      <span class="error">La ruta admite máximo 120 caracteres</span>
+    }
+    @if (c.imagen.valid) {
+      <img class="vista-previa" [src]="urlImagen(c.imagen.value)" alt="Vista previa de la imagen" />
+    }
+  </div>
+
+  <div class="acciones">
+    <button class="boton" type="submit">Guardar</button>
+  </div>
+</form>
+
+@if (porEnviar(); as clase) {
+  <div class="aviso aviso--exito">
+    <p>Esto es lo que se mandaría a <code>POST /clases</code> (todavía no se envía nada):</p>
+    <pre>{{ clase | json }}</pre>
+  </div>
+}
