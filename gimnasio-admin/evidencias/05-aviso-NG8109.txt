@@ -1,0 +1,32 @@
+Práctica 20 · aviso NG8109
+Se provocó quitando los paréntesis del computed en src/app/app.html, línea 42:
+    {{ catalogo.minutos }}      (bien: {{ catalogo.minutos() }})
+Salida de: npx ng build
+En la página, en lugar de 380 se veía: [Computed (minutos): 380]
+
+▲ [WARNING] NG8109: NG8109: minutos is a function and should be invoked: minutos()}. Find more at https://v22.angular.dev/extended-diagnostics/NG8109 [plugin angular-compiler]
+
+    C:/Users/dario/Documents/Practica 15/gimnasio-admin/src/app/app.html:42:48:
+      42 │       <span class="resumen__numero">{{ catalogo.minutos }}</span>
+         ╵                                                 ~~~~~~~
+
+  Warning occurs in the template of component App.
+
+    C:/Users/dario/Documents/Practica 15/gimnasio-admin/src/app/app.ts:13:15:
+      13 │   templateUrl: './app.html',
+         ╵                ~~~~~~~~~~~~
+
+
+▲ [WARNING] NG8117: NG8117: Function in text interpolation should be invoked: minutos(). Find more at https://v22.angular.dev/extended-diagnostics/NG8117 [plugin angular-compiler]
+
+    C:/Users/dario/Documents/Practica 15/gimnasio-admin/src/app/app.html:42:48:
+      42 │       <span class="resumen__numero">{{ catalogo.minutos }}</span>
+         ╵                                                 ~~~~~~~
+
+  Warning occurs in the template of component App.
+
+    C:/Users/dario/Documents/Practica 15/gimnasio-admin/src/app/app.ts:13:15:
+      13 │   templateUrl: './app.html',
+         ╵                ~~~~~~~~~~~~
+
+

@@ -1,0 +1,22 @@
+<!-- Práctica 20: al dar clic (o Enter con el teclado) la tarjeta avisa al padre con elegir.emit(). -->
+<article
+  class="tarjeta-clase"
+  [class.tarjeta-clase--activa]="activa()"
+  tabindex="0"
+  (click)="elegir.emit(clase())"
+  (keydown.enter)="elegir.emit(clase())"
+>
+  <img [src]="urlImagen(clase().imagen)" [alt]="clase().nombre" loading="lazy" />
+  <div class="tarjeta-clase__cuerpo">
+    <h3 class="tarjeta-clase__nombre">{{ clase().nombre }}</h3>
+    <p class="clase__desc">{{ clase().descripcion }}</p>
+    <div class="tarjeta-clase__pie">
+      <span [class]="'etiqueta etiqueta--' + clase().categoria">{{ clase().categoria }}</span>
+      <span class="etiqueta etiqueta--min">{{ clase().duracionMin }} min</span>
+      <!-- «Larga» sólo en las clases de 60 minutos o más. -->
+      @if (clase().duracionMin >= 60) {
+        <span class="etiqueta etiqueta--larga">Larga</span>
+      }
+    </div>
+  </div>
+</article>
