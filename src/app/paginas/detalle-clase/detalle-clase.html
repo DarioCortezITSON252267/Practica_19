@@ -1,0 +1,47 @@
+<section class="encabezado">
+  <div>
+    <h1>{{ clase.hasValue() ? clase.value()!.nombre : 'Detalle de la clase' }}</h1>
+    <p>Los horarios de la clase y sus lugares disponibles.</p>
+  </div>
+  <div class="acciones">
+    <a routerLink="/clases" class="boton boton--secundario">← Volver al catálogo</a>
+    <a [routerLink]="['/clases', id(), 'editar']" class="boton">Editar</a>
+  </div>
+</section>
+
+@if (clase.isLoading()) {
+  <p class="cargando">Cargando la clase…</p>
+} @else if (clase.error(); as error) {
+  <div class="aviso aviso--error">{{ mensaje(error) }}</div>
+} @else if (clase.hasValue()) {
+  <article class="tarjeta">
+    <p class="clase__desc">{{ clase.value()!.descripcion }}</p>
+    <div class="dato">
+      <span class="dato__clave">Categoría</span>
+      <span class="dato__valor">{{ clase.value()!.categoria }}</span>
+    </div>
+    <div class="dato">
+      <span class="dato__clave">Duración</span>
+      <span class="dato__valor">{{ clase.value()!.duracionMin }} min</span>
+    </div>
+
+    <h2>Horarios</h2>
+    <ul class="horarios">
+      @for (h of clase.value()!.horarios; track h.id) {
+        <li class="horario">
+          <div>
+            <div class="horario__cuando">{{ h.dia }} · {{ h.horaInicio }}</div>
+            <div class="horario__quien">{{ h.entrenador }}</div>
+          </div>
+          @if (h.disponibles === 0) {
+            <span class="etiqueta etiqueta--lleno">Lleno</span>
+          } @else {
+            <span class="etiqueta">{{ h.disponibles }} de {{ h.cupoMaximo }} lugares</span>
+          }
+        </li>
+      } @empty {
+        <li class="vacio">Esta clase todavía no tiene horarios.</li>
+      }
+    </ul>
+  </article>
+}
